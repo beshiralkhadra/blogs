@@ -1,0 +1,14 @@
+apps/*/.next/
+apps/*/out/
+apps/*/build/
+apps/*/dist/
+packages/*/build/
+packages/*/dist/
+.turbo/
+node_modules/
+**/*.log
+**/.DS_Store
+**/.vscode/settings.json
+**/.env*.local
+**/.idea/
+.vscode/
