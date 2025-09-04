@@ -6,17 +6,23 @@ const protectedRoutes = ['/blogs/new', '/blogs/edit'];
 const AUTH_COOKIE = process.env.AUTH_COOKIE_NAME ?? 'auth';
 
 export function middleware(request: NextRequest) {
+  console.log('tmmmmmmmm');
+  
   const { pathname } = request.nextUrl;
   
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
   const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/api/auth');
 
+  console.log({isProtectedRoute});
+  
   if (isPublicRoute) {
     return NextResponse.next();
   }
 
   if (isProtectedRoute) {
     const token = request.cookies.get(AUTH_COOKIE)?.value;
+    
+    console.log({token});
     
     if (!token) {
       return NextResponse.redirect(new URL('/login', request.url));

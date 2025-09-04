@@ -6,6 +6,8 @@ module.exports = async function auth(req, res, next) {
   try {
     const header = req.headers['authorization'] || '';
     const match = /^Bearer\s+(.+)$/i.exec(header);
+    console.log({match});
+    
     if (!match) {
       return res.status(401).json({ success: false, message: 'Unauthorized' });
     }

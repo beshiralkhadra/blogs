@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBackendApiUrl, getApiEndpoint } from '../_config/backend';
+import { cookies } from 'next/headers';
 
 export async function GET() {
   try {
@@ -31,20 +32,16 @@ console.log({response});
 export async function POST(req: NextRequest) {
   console.log('Blog POST route called');
   const body = await req.json();
-  console.log('Request body:', body);
-
-  const cookies = req.headers.get('cookie');
+  const cookieStore = await cookies();
+    const token = cookieStore.get(process.env.AUTH_COOKIE_NAME ?? 'auth')?.value;
+    
   const headers: Record<string, string> = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
   };
 
-  if (cookies) {
-    const authCookie = cookies.split(';').find((c: string) => c.trim().startsWith('auth='));
-    if (authCookie) {
-      const token = authCookie.split('=')[1];
+  if (token) {
       headers['Authorization'] = `Bearer ${token}`;
-    }
   }
 
   return fetch(getApiEndpoint( '/blog/blogs'), {
